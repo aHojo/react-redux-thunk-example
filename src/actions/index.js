@@ -1,4 +1,17 @@
+import _ from 'lodash';
 import jsonplaceholder from "../apis/jsonplaceholder";
+
+export const fetchPostsAndUsers = () => {
+
+    return async (dispatch, getState) => {
+                await dispatch(fetchPosts());
+        const userIds = _.uniq(_.map(getState().posts, 'userId')); // get all the userId's in posts object // uniq gets just the uniq values.
+
+        console.log(userIds);
+
+        userIds.forEach(id => dispatch(fetchUser(id)));
+    }
+}
 
 export const fetchPosts = () => {
 
@@ -13,7 +26,7 @@ export const fetchPosts = () => {
 }
 
 export const fetchUser = (id) => {
-    return async dispatch => {
+    return  async dispatch => {
         const response = await jsonplaceholder.get(`/users/${id}`)
 
         dispatch(
@@ -25,3 +38,19 @@ export const fetchUser = (id) => {
     }
 }
 
+// export const fetchUser = (id) => {
+//     return  dispatch => {
+//         _fetchUser(id, dispatch);
+//     }
+// }
+
+// const _fetchUser = _.memoize(async (id, dispatch) => {
+//     const response = await jsonplaceholder.get(`/users/${id}`)
+//
+//     dispatch(
+//         {
+//             type: 'FETCH_USER',
+//             payload: response.data
+//         }
+//     )
+// })

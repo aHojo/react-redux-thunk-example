@@ -1,16 +1,22 @@
 import React from "react";
 import {connect} from "react-redux";
-import {fetchPosts} from "../actions";
+import {fetchPosts, fetchPostsAndUsers} from "../actions";
+import UserHeader from "./UserHeader";
+
+
 
 
 class PostList extends React.Component {
 
     componentDidMount() {
-        this.props.fetchPosts();
+        // this.props.fetchPosts();
+        this.props.fetchPostsAndUsers();
     }
 
     renderList(){
+
         return this.props.posts.map(post => {
+        console.log(post.userId);
             return (
                 <div className="item" key={post.id}>
                     <i className="large middle aligned icon user" />
@@ -19,6 +25,7 @@ class PostList extends React.Component {
                             <h2>{post.title}</h2>
                             <p>{post.body}</p>
                         </div>
+                        <UserHeader userId={post.userId}/>
                     </div>
                 </div>
             );
@@ -32,10 +39,9 @@ class PostList extends React.Component {
 }
 
 function mapStateToProps(state) {
-    console.log(state);
     return {
         posts: state.posts
     }
 }
 
-export default connect(mapStateToProps,{fetchPosts})(PostList)
+export default connect(mapStateToProps,{fetchPosts,fetchPostsAndUsers})(PostList)
